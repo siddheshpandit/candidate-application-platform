@@ -7,7 +7,7 @@ const jobsSlice = createSlice({
     initialState:jobs,
     reducers: {
         addJobs: (state, action) => {
-            return action.payload;
+            state.push(...action.payload);
         }
     }
 });

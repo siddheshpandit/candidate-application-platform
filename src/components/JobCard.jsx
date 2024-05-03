@@ -1,42 +1,99 @@
-import React from 'react'
-import {Button, Card, CardActions, CardContent, CardHeader, Typography} from '@mui/material'
-const JobCard = ({jobData}) => {
-  const {jdLink,jobDetailsFromCompany,jobRole,location,maxExp,maxJdSalary,minExp,minJdSalary,salaryCurrencyCode}=jobData;
-  
-  const handleApply=()=>{
-    window.location.href=jdLink;
-  }
-  return (
-    <div className="jobCard">
-      
-        {/* <div style={{border:'1px solid black', borderRadius:'10px', }}> */}
-      <Card sx={{ boxShadow: '0px 4px 12px rgba(0, 0, 0, 0.1)', borderRadius: '12px',width:'400px', padding:'20px' }}>
-      <CardHeader
-        title={jobRole}
-        subheader={`Weekday - ${location}`}
-        sx={{ borderBottom: '1px solid #EAEAEA' }}
-        titleTypographyProps={{
-          sx: {
-            fontSize: '24px', // Customize font size
-            fontWeight: 10, // Set font weight to 10
-            color: 'black', // Customize text color
-            fontFamily: 'Arial, sans-serif', // Customize font family
-          }
-        }}
-      />
-      <CardContent>
-        <Typography variant="body2" color="text.secondary">
-          {jobDetailsFromCompany}
-        </Typography>
-      </CardContent>
-      <CardActions>
-        <Button variant="contained" onClick={handleApply} style={{width:'100%',justifyContent:'center', backgroundColor:'cyan', color:'black'}}>
-          Apply
-        </Button>
-      </CardActions>
-    </Card>
-    </div>
-  )
-}
+import React, { useState } from "react";
+import {
+  Button,
+  Card,
+  CardActions,
+  CardContent,
+  CardHeader,
+  Typography,
+} from "@mui/material";
+const JobCard = ({ jobData }) => {
+  const {
+    jdLink,
+    jobDetailsFromCompany,
+    jobRole,
+    location,
+    maxExp,
+    maxJdSalary,
+    minExp,
+    minJdSalary,
+    salaryCurrencyCode,
+  } = jobData;
+  const [expanded, setExpanded] = useState(false);
+  const handleApply = () => {
+    window.location.href = jdLink;
+  };
 
-export default JobCard
+  const handleExpandClick = () => {
+    setExpanded(!expanded);
+  };
+  return (
+    <div className="jobCard" style={{textTransform:'capitalize'}}>
+      <Card
+        sx={{
+          boxShadow: "1px 1px 2px 1px rgba(0, 0, 0, 0.1)",
+          borderRadius: "20px",
+          width: "350px",
+          padding: "10px",
+        }}
+      >
+        <CardHeader
+          title={jobRole}
+          subheader={`Weekday - ${location}`}
+          sx={{ borderBottom: "1px solid #EAEAEA" }}
+          titleTypographyProps={{
+            sx: {
+              fontSize: "24px",
+              fontWeight: 10,
+              color: "black",
+              fontFamily: "Arial, sans-serif",
+            },
+          }}
+        />
+        <CardContent>
+          <Typography variant="body1" color="initial">
+            Estimated Salary: {salaryCurrencyCode} {minJdSalary}-{maxJdSalary}K ✔
+          </Typography>
+          <Typography variant="body2" color="text.secondary">
+            {expanded
+              ? jobDetailsFromCompany
+              : `${jobDetailsFromCompany.slice(0, 450)}...`}
+          </Typography>
+          {!expanded && (
+            <Button size="small" onClick={handleExpandClick} style={{}}>
+              View Job
+            </Button>
+          )}
+          {minExp !== undefined && minExp!==null && (
+            <div>
+              <Typography variant="body2" color="text.secondary">
+                Minimum Experience:
+              </Typography>
+              <Typography variant="body2" color="text.secondary">
+                {minExp} years
+              </Typography>
+            </div>
+          )}
+        </CardContent>
+
+        <CardActions>
+          <Button
+            variant="contained"
+            onClick={handleApply}
+            style={{
+              borderRadius: "10px",
+              width: "100%",
+              justifyContent: "center",
+              backgroundColor: "cyan",
+              color: "black",
+            }}
+          >
+            Apply
+          </Button>
+        </CardActions>
+      </Card>
+    </div>
+  );
+};
+
+export default JobCard;
