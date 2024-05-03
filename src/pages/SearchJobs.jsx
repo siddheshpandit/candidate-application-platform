@@ -31,7 +31,7 @@ const SearchJobs = () => {
   };
 
   return (
-    <div style={{justifyContent:'center', display:'flex', flexDirection:'column'}}>
+    <div style={{justifyContent:'center', display:'flex', flexDirection:'column', margin: '20px auto'}}>
       <Filters filters={filters} onFilterChange={handleFilterChange} />
       <JobsList filters={filters} />
     </div>

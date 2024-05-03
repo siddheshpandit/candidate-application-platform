@@ -1,5 +1,5 @@
-import React from 'react';
-import Select from 'react-select';
+import React from "react";
+import Select from "react-select";
 
 const MultiSelectFilter = ({ name, options, value, onChange }) => {
   const handleChange = (selectedOptions) => {
@@ -7,16 +7,18 @@ const MultiSelectFilter = ({ name, options, value, onChange }) => {
   };
 
   return (
-    <Select
-      isMulti
-      name={name}
-      options={options}
-      className="basic-multi-select"
-      classNamePrefix="select"
-      value={value}
-      onChange={handleChange}
-      placeholder={name}
-    />
+    <div>
+      <Select
+        isMulti
+        name={name}
+        options={options}
+        className="basic-multi-select"
+        classNamePrefix="select"
+        value={value}
+        onChange={handleChange}
+        placeholder={name}
+      />
+    </div>
   );
 };
 

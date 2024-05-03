@@ -38,7 +38,6 @@ const JobsList = ({ filters }) => {
       }
       const result = await response.json();
       dispatch(addJobs(result.jdList));
-    //   setJobList((prev) => [...prev, ...data]);
     setFilteredJobs(result.jdList);
     } catch (error) {
       setError(error);
@@ -89,8 +88,8 @@ const JobsList = ({ filters }) => {
       className="jobList"
       style={{
         display: "flex",
-        justifyContent: "center",
-        gap: "20px",
+        justifyContent: "left",
+        gap: "40px",
         flexWrap: "wrap",
         marginTop:'20px'
       }}

@@ -20,7 +20,7 @@ const JobCard = ({ jobData }) => {
     minJdSalary,
     salaryCurrencyCode,
     companyName,
-    logoUrl
+    logoUrl,
   } = jobData;
 
   const [expanded, setExpanded] = useState(false);
@@ -41,17 +41,16 @@ const JobCard = ({ jobData }) => {
           borderRadius: "20px",
           width: "350px",
           padding: "10px",
+          minHeight: "400px",
         }}
       >
         <CardHeader
           title={companyName || "Company Name Unavailable"}
           subheader={
             <>
-              <Typography variant="subtitle1">
-                {jobRole || "Job Role Unavailable"}
-              </Typography>
+              <Typography variant="subtitle1">{jobRole}</Typography>
               <Typography variant="subtitle2">
-                {location || "Location Unavailable"}
+                {location || "Remote"}
               </Typography>
             </>
           }
@@ -64,33 +63,65 @@ const JobCard = ({ jobData }) => {
               fontFamily: "Arial, sans-serif",
             },
           }}
-          avatar={<img src={logoUrl} alt={companyName} style={{ width: 50, height: 50, borderRadius: '50%', alignItems:'top' }} />}
+          avatar={
+            <img
+              src={logoUrl}
+              alt={companyName}
+              style={{
+                width: 50,
+                height: 50,
+                borderRadius: "50%",
+                alignItems: "top",
+              }}
+            />
+          }
         />
         <CardContent>
           <Typography variant="body1" color="initial">
-            Estimated Salary: {salaryCurrencyCode} {minJdSalary || "-"}-{maxJdSalary || "-"}K ✔
+            Estimated Salary: {salaryCurrencyCode}{" "}
+            {minJdSalary !== null &&
+            minJdSalary !== undefined &&
+            maxJdSalary !== null &&
+            maxJdSalary !== undefined
+              ? `${minJdSalary}-${maxJdSalary}`
+              : minJdSalary !== null &&
+                minJdSalary !== undefined &&
+                (maxJdSalary === null || maxJdSalary === undefined)
+              ? `${minJdSalary}-5`
+              : maxJdSalary !== null &&
+                maxJdSalary !== undefined &&
+                (minJdSalary === null || minJdSalary === undefined)
+              ? `${maxJdSalary - 5}-${maxJdSalary}`
+              : "-"}
+            K
           </Typography>
           <Typography variant="body2">About Company:</Typography>
           <Typography variant="body2" color="text.secondary">
-            {expanded
-              ? jobDetailsFromCompany || "No details available"
-              : `${(jobDetailsFromCompany || "").slice(0, 450)}...`}
+            {expanded ? (
+              <>
+                {jobDetailsFromCompany}
+                <Button size="small" onClick={handleExpandClick} style={{}}>
+                  Hide
+                </Button>
+              </>
+            ) : (
+              `${(jobDetailsFromCompany || "").slice(0, 450)}...`
+            )}
           </Typography>
           {!expanded && (
             <Button size="small" onClick={handleExpandClick} style={{}}>
               View Job
             </Button>
           )}
-          {minExp !== undefined && minExp !== null && (
+          
             <div>
               <Typography variant="body2" color="text.secondary">
                 Minimum Experience:
               </Typography>
               <Typography variant="body2" color="text.secondary">
-                {minExp} years
+                {minExp?minExp:'2'} years
               </Typography>
             </div>
-          )}
         </CardContent>
 
         <CardActions>
