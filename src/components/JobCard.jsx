@@ -7,6 +7,7 @@ import {
   CardHeader,
   Typography,
 } from "@mui/material";
+
 const JobCard = ({ jobData }) => {
   const {
     jdLink,
@@ -18,8 +19,12 @@ const JobCard = ({ jobData }) => {
     minExp,
     minJdSalary,
     salaryCurrencyCode,
+    companyName,
+    logoUrl
   } = jobData;
+
   const [expanded, setExpanded] = useState(false);
+
   const handleApply = () => {
     window.location.href = jdLink;
   };
@@ -27,8 +32,9 @@ const JobCard = ({ jobData }) => {
   const handleExpandClick = () => {
     setExpanded(!expanded);
   };
+
   return (
-    <div className="jobCard" style={{textTransform:'capitalize'}}>
+    <div className="jobCard" style={{ textTransform: "capitalize" }}>
       <Card
         sx={{
           boxShadow: "1px 1px 2px 1px rgba(0, 0, 0, 0.1)",
@@ -38,8 +44,17 @@ const JobCard = ({ jobData }) => {
         }}
       >
         <CardHeader
-          title={jobRole}
-          subheader={`Weekday - ${location}`}
+          title={companyName || "Company Name Unavailable"}
+          subheader={
+            <>
+              <Typography variant="subtitle1">
+                {jobRole || "Job Role Unavailable"}
+              </Typography>
+              <Typography variant="subtitle2">
+                {location || "Location Unavailable"}
+              </Typography>
+            </>
+          }
           sx={{ borderBottom: "1px solid #EAEAEA" }}
           titleTypographyProps={{
             sx: {
@@ -49,22 +64,24 @@ const JobCard = ({ jobData }) => {
               fontFamily: "Arial, sans-serif",
             },
           }}
+          avatar={<img src={logoUrl} alt={companyName} style={{ width: 50, height: 50, borderRadius: '50%', alignItems:'top' }} />}
         />
         <CardContent>
           <Typography variant="body1" color="initial">
-            Estimated Salary: {salaryCurrencyCode} {minJdSalary}-{maxJdSalary}K ✔
+            Estimated Salary: {salaryCurrencyCode} {minJdSalary || "-"}-{maxJdSalary || "-"}K ✔
           </Typography>
+          <Typography variant="body2">About Company:</Typography>
           <Typography variant="body2" color="text.secondary">
             {expanded
-              ? jobDetailsFromCompany
-              : `${jobDetailsFromCompany.slice(0, 450)}...`}
+              ? jobDetailsFromCompany || "No details available"
+              : `${(jobDetailsFromCompany || "").slice(0, 450)}...`}
           </Typography>
           {!expanded && (
             <Button size="small" onClick={handleExpandClick} style={{}}>
               View Job
             </Button>
           )}
-          {minExp !== undefined && minExp!==null && (
+          {minExp !== undefined && minExp !== null && (
             <div>
               <Typography variant="body2" color="text.secondary">
                 Minimum Experience:
