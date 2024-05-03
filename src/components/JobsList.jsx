@@ -3,6 +3,7 @@ import JobCard from "./JobCard";
 import { requestOptions } from "../services/api";
 import { useDispatch, useSelector } from "react-redux";
 import { addJobs } from "../store/jobsSlice";
+import { Box, CircularProgress } from "@mui/material";
 
 const JobsList = ({ filters }) => {
   const dispatch = useDispatch();
@@ -10,19 +11,18 @@ const JobsList = ({ filters }) => {
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState(null);
   const [offset, setOffset] = useState(0);
-//   const [jobList, setJobList] = useState([]);
   const [filteredJobs, setFilteredJobs] = useState([]);
 
   useEffect(() => {
     getJobsList();
-  }, []); // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [offset]);
 
-  // useEffect(()=>{
-  //     window.addEventListener('scroll', handleScroll);
-  //     return () => {
-  //         window.removeEventListener('scroll', handleScroll);
-  //     };
-  // })
+  useEffect(()=>{
+      window.addEventListener('scroll', handleScroll);
+      return () => {
+          window.removeEventListener('scroll', handleScroll);
+      };
+  })
   const getJobsList = async () => {
     setIsLoading(true);
     try {
@@ -30,7 +30,7 @@ const JobsList = ({ filters }) => {
         "https://api.weekday.technology/adhoc/getSampleJdJSON",
         {
           ...requestOptions,
-          body: JSON.stringify({ limit: 10, offset: 0 }),
+          body: JSON.stringify({ limit: 10, offset: offset }),
         }
       );
       if (!response.ok) {
@@ -38,38 +38,36 @@ const JobsList = ({ filters }) => {
       }
       const result = await response.json();
       dispatch(addJobs(result.jdList));
-    setFilteredJobs(result.jdList);
+      const newData = applyFilters(result.jdList, filters);
+      setFilteredJobs([...filteredJobs,...newData]);
     } catch (error) {
       setError(error);
-      console.error("Error fetching data:", error);
     } finally {
       setIsLoading(false);
     }
   };
 
-  // const handleScroll = async () => {
-  //     try{
-  //         if (!isLoading && window.innerHeight + document.documentElement.scrollTop >=document.documentElement.offsetHeight - 20) {
-  //             // Fetch more data
-  //             setOffset(prevOffset => prevOffset + 10);
-  //         }
-  //     }
-  //     catch(error){
-  //         console.log(error);
-  //     }
-  // };
+  const handleScroll = async () => {
+      try{
+          if (!isLoading && window.innerHeight + document.documentElement.scrollTop >=document.documentElement.offsetHeight - 20) {
+              setOffset(prevOffset => prevOffset + 10);
+          }
+      }
+      catch(error){
+          console.log(error);
+      }
+  };
 
   useEffect(() => {
-    // Apply filters whenever filters change
     const filteredData = applyFilters(jobList, filters);
     setFilteredJobs(filteredData);
   }, [filters]);
 
-  const applyFilters = () => {
-    let filteredData = jobList;
-    // For Roles 
+  const applyFilters = (data, filters) => {
+    console.log(filters)
+    let filteredData = data;
     if (filters.roles.length > 0) {
-        filteredData = jobList.filter(job => {
+        filteredData = filteredData.filter(job => {
             const lowerCaseRole = job.jobRole.toLowerCase();
             return filters.roles.some(role => lowerCaseRole.includes(role.toLowerCase()));
         });
@@ -79,7 +77,12 @@ const JobsList = ({ filters }) => {
     } else{
         filteredData = filteredData.filter(job => !job.location.toLowerCase().includes('remote'));
     }
+
+    if(filters.basePay){
+        filteredData= filteredData.filter(job => job.minJdSalary>=filters.basePay || job.maxJdSalary>=filters.basePay+5)
+    }
     console.log(filteredData);
+    console.log(jobList);
     return filteredData;
 };
 
@@ -102,7 +105,9 @@ const JobsList = ({ filters }) => {
           style={{ flex: "0 0 calc(33.333% - 20px)" }}
         />
       ))}
-      {isLoading && <div>Loading...</div>}
+      {isLoading && <Box sx={{ display: 'flex' , justifyContent:'center',width: '100%'}}>
+      <CircularProgress />
+    </Box>}
     </div>
   );
 };

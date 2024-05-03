@@ -1,5 +1,4 @@
 import React from "react";
-import Multiselect from "./Multiselect";
 import MultiSelectFilter from "./Multiselect";
 import SingleSelectFilter from "./Select";
 
@@ -27,6 +26,15 @@ const locationOptions = [
   { value: "In-office", label: "In-office" },
 ];
 
+const basePayOption=[
+  { value: 0, label: 0 },
+  { value: 10, label: 10 },
+  { value: 20, label: 20 },
+  { value: 30, label: 30 },
+  { value: 50, label: 50 },
+  { value: 75, label: 75 },
+  { value: 100, label: 100 },
+]
 const Filters = ({ onFilterChange, filters }) => {
   const handleFilterChange = (category, selectedOptions) => {
     onFilterChange(category, selectedOptions);
@@ -45,6 +53,13 @@ const Filters = ({ onFilterChange, filters }) => {
         options={locationOptions}
         onChange={(selectedOptions) =>
           handleFilterChange("isRemote", selectedOptions)
+        }
+      />
+      <SingleSelectFilter
+        name={"Minimum Base Pay Salary"}
+        options={basePayOption}
+        onChange={(selectedOptions) =>
+          handleFilterChange("basePay", selectedOptions)
         }
       />
     </div>

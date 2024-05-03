@@ -6,6 +6,7 @@ const SearchJobs = () => {
   const initialFilters = {
     roles: [],
     location: null,
+    basePay:null
     // Add more filter categories as needed
   };
 
