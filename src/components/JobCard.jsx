@@ -42,6 +42,10 @@ const JobCard = ({ jobData }) => {
           width: "350px",
           padding: "10px",
           minHeight: "400px",
+          transition: "transform 0.5s ease-in-out",
+          "&:hover": {
+            transform: "scale(1.05)",
+          },
         }}
       >
         <CardHeader
