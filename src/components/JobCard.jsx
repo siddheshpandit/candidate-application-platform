@@ -110,7 +110,7 @@ const JobCard = ({ jobData }) => {
           </Typography>
           {!expanded && (
             <Button size="small" onClick={handleExpandClick} style={{}}>
-              View Job
+              Show
             </Button>
           )}
           

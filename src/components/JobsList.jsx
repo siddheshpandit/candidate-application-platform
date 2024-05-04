@@ -64,7 +64,6 @@ const JobsList = ({ filters }) => {
   }, [filters]);
 
   const applyFilters = (data, filters) => {
-    console.log(filters)
     let filteredData = data;
     if (filters.roles.length > 0) {
         filteredData = filteredData.filter(job => {
@@ -81,8 +80,6 @@ const JobsList = ({ filters }) => {
     if(filters.basePay){
         filteredData= filteredData.filter(job => job.minJdSalary>=filters.basePay || job.maxJdSalary>=filters.basePay+5)
     }
-    console.log(filteredData);
-    console.log(jobList);
     return filteredData;
 };
 
